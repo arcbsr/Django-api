@@ -59,8 +59,7 @@ def api_exception_handler(exc , context ) :
         status_code = response.status_code
 
         # error["status_code"] = status_code
-        error["message"] = response.data['detail']
-        # http_code_to_message[status_code]
+        error["message"] = http_code_to_message[status_code]
         # error["details"] = response.data
         response.data = error_payload
     else:
