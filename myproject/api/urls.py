@@ -5,6 +5,7 @@ from knox import views as knox_views
 from rest_framework import routers
 from .apiviews import RegisterView, LoginView
 from .userroles.test import AdminOnlyView, StaffOnlyView, AdminOrStaffView, UserOnlyView
+from .apiviews.Chatting import *
 
 router = routers.DefaultRouter(trailing_slash=True)
 urlpatterns = [
@@ -17,4 +18,9 @@ urlpatterns = [
     path('api/staff-only/', StaffOnlyView.as_view(), name='staff-only'),
     path('api/admin-or-staff/', AdminOrStaffView.as_view(), name='admin-or-staff'),
     path('api/useronly/', UserOnlyView.as_view(), name='admin-or-staff'),
+    
+    path('', CreateRoom, name='create-room'),
+    # path('<str:room_name>/<str:username>/', views.MessageView, name='room'),
+    
+    path('<str:room_name>/<str:username>/', MessageView2, name='room'),
 ]

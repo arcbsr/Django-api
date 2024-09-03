@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from ..apimodules.UserProfile import CustomUser
+from ..apimodules.Room import Room, Message
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 
@@ -24,3 +25,8 @@ class LoginSerializer(serializers.Serializer):
             'user': user
         }
     
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = '__all__'
