@@ -147,7 +147,6 @@
                         if (response.ok) {
                             const data = await response.json();
                             localStorage.setItem('token', data.result.token);
-                            alert(`Login successful!);
         
                             // After login, fetch the dashboard
                             fetch('/dashboard/', {
