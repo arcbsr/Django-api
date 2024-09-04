@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-9+cm1pg(1g=b1%og*sud0+x7*t6b3vcoxw!ci#ux4^@j_9)rv4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['159.223.119.17','127.0.0.1']
+ALLOWED_HOSTS = ['159.223.119.17','127.0.0.1','localhost']
 
 
 # Application definition
@@ -85,7 +85,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 ASGI_APPLICATION = 'myproject.asgi.application'
-
+# important in serer side
+# uninstall channels and daphne
+# python -m pip install -U channels["daphne"]
 CHANNEL_LAYERS = {
     "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
 }

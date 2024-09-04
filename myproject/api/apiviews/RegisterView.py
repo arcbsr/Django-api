@@ -7,6 +7,7 @@ from rest_framework  import serializers
 from ..apiserializers.serializers import UserSerializer, LoginSerializer
 from ..models import CustomUser
 from rest_framework import status
+from django.shortcuts import render
 
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+    
+            .login-container {
+                background-color: #ffffff;
+                padding: 40px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                max-width: 400px;
+                width: 100%;
+                text-align: center;
+            }
+    
+            .login-container h2 {
+                margin-bottom: 20px;
+                font-size: 24px;
+                color: #333;
+            }
+    
+            .login-container label {
+                display: block;
+                margin-bottom: 8px;
+                font-size: 14px;
+                color: #555;
+                text-align: left;
+            }
+    
+            .login-container input[type="text"],
+            .login-container input[type="password"] {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 20px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+    
+            .login-container button[type="submit"] {
+                background-color: #007bff;
+                color: #fff;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 4px;
+                font-size: 16px;
+                cursor: pointer;
+                width: 100%;
+                transition: background-color 0.3s ease;
+            }
+    
+            .login-container button[type="submit"]:hover {
+                background-color: #0056b3;
+            }
+    
+            .login-container a {
+                display: inline-block;
+                margin-top: 20px;
+                text-decoration: none;
+                color: #007bff;
+                font-size: 14px;
+            }
+    
+            .login-container a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <h2>Login</h2>
+            <form id="loginForm" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+    
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+    
+                <button type="submit">Login</button>
+            </form>
+            <a href="/register/">Create new account</a>
+        </div>
+
+    <script>
+        document.getElementById('loginForm').onsubmit = async function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/api/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', data.result.token);
+                alert(`Login successful! ${localStorage.getItem('token')}`)
+                // window.location.href = `/fifa/${username}/?token=${localStorage.getItem('token')}`;
+                fetch('/dashboard/', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Token ' + localStorage.getItem('token')  // Add the token from localStorage
+                    },
+                    credentials: 'include'  // Optional: Use this if dealing with cookies as well
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        console.error('Failed to load dashboard.');
+                    }
+                })
+                .then(data => {
+                    document.open();
+                    document.write(data);
+                    document.close();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            } else {
+                alert('Login failed!');
+            }
+        };
+    </script>
+</body>
+</html>

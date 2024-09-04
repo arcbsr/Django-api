@@ -6,14 +6,15 @@ from channels.exceptions import DenyConnection
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        # if self.scope['user'].is_anonymous:
-        #     await self.close()
-        #     raise DenyConnection("User is not authenticated")
+        if self.scope['user'].is_anonymous:
+            await self.close()
+            raise DenyConnection("User is not authenticated")
 
-
+        print(self.scope['user'])
         self.room_name_chnl = f"room_{self.scope['url_route']['kwargs']['room_name']}"
         self.room_name = f"{self.scope['url_route']['kwargs']['room_name']}"
-        self.user_name = f"{self.scope['url_route']['kwargs']['user_name']}"
+        self.user_name = self.scope['user'].username
+        # f"{self.scope['url_route']['kwargs']['user_name']}"
         await self.channel_layer.group_add(self.room_name_chnl, self.channel_name)
         await self.accept()
         
@@ -23,7 +24,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json
-        message['sender'] = f"{self.scope['url_route']['kwargs']['user_name']}"
+        
+        username = self.scope['user'].username
+        message['sender'] = username
+        # f"{self.scope['url_route']['kwargs']['user_name']}"
         message['room'] = f"{self.scope['url_route']['kwargs']['room_name']}"
         await self.create_message(data=message)
         event = {

@@ -39,7 +39,7 @@
     <script>
         const roomName = "{{ room_name }}";
         const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-        const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/{{room_name}}/{{user}}/`;
+        const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/{{room_name}}/?token={{token}}`;
         const chatSocket = new WebSocket(wsEndpoint);
 
         chatSocket.onmessage = function(e) {
