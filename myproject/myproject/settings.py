@@ -88,6 +88,7 @@ ASGI_APPLICATION = 'myproject.asgi.application'
 # important in serer side
 # uninstall channels and daphne
 # python -m pip install -U channels["daphne"]
+# python manage.py runserver 0.0.0.0:8000
 CHANNEL_LAYERS = {
     "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
 }

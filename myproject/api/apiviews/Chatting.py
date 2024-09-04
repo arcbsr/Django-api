@@ -166,7 +166,6 @@ class DashboardView(View):
 
             # Authenticate the token
             user, auth_token = self.authenticate_token(token)
-            print(user)
             if user:
                 try:
                     get_room = Room.objects.get(room_name='fifa')
@@ -184,15 +183,15 @@ class DashboardView(View):
                 get_messages = Message.objects.filter(room=get_room)
                 context = {
                     "messages": get_messages,
-                    "user": user,
+                    "user": user.username,
                     "room_name": 'fifa',
                     "token": token,
                 }
                 return render(request, 'msg.html', context)
             else:
-                return render(request, 'login.html')
+                return render(request, 'login.html', status=401)
         else:
-            return render(request, 'login.html')
+            return render(request, 'login.html', status=401)
 
     def authenticate_token(self, token):
         try:
