@@ -98,7 +98,7 @@
                 // Check if token exists in localStorage
                 const existingToken = localStorage.getItem('token');
                 if (!existingToken) {
-                    alert('You need to login first!');
+                    alert('Please Login...');
                 }else {
                     // After login, fetch the dashboard
                     fetch('/dashboard/', {
@@ -114,7 +114,7 @@
                                 } else {
                                     localStorage.setItem('token', "");
                                     existingToken= ""
-                                    alert('You need to login first!');
+                                    alert('Please Login...');
                                     console.error('Failed to load dashboard.');
                                 }
                             })
@@ -125,7 +125,7 @@
                             })
                             .catch(error => {
                                 localStorage.setItem('token', "");
-                                alert('You need to login first!');
+                                alert('Please Login...');
                                 console.error('Error:', error);
                             });
                 }
@@ -161,7 +161,7 @@
                                     return response.text();
                                 } else {
                                     localStorage.setItem('token', "");
-                                    console.error('Failed to load dashboard.');
+                                    console.error('Error..');
                                 }
                             })
                             .then(data => {
