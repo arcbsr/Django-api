@@ -8,6 +8,8 @@ from .userroles.test import AdminOnlyView, StaffOnlyView, AdminOrStaffView, User
 from .apiviews.Chatting import *
 from .apiviews.userviews import register_view, login_view, upload_view
 from .FileUploadConsumer import FileUploadConsumer
+from django.conf import settings
+from django.conf.urls.static import static
 
 router = routers.DefaultRouter(trailing_slash=True)
 urlpatterns = [
@@ -31,4 +33,4 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
     path('upload/', upload_view, name='upload'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
