@@ -1,12 +1,13 @@
 # api/urls.py
 
-from django.urls import path,include
+from django.urls import path,include,re_path
 from knox import views as knox_views
 from rest_framework import routers
 from .apiviews import RegisterView, LoginView
 from .userroles.test import AdminOnlyView, StaffOnlyView, AdminOrStaffView, UserOnlyView
 from .apiviews.Chatting import *
-from .apiviews.userviews import register_view, login_view
+from .apiviews.userviews import register_view, login_view, upload_view
+from .FileUploadConsumer import FileUploadConsumer
 
 router = routers.DefaultRouter(trailing_slash=True)
 urlpatterns = [
@@ -29,4 +30,5 @@ urlpatterns = [
     path('register/', register_view, name='register'),
     path('login/', login_view, name='login'),
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    path('upload/', upload_view, name='upload'),
 ]

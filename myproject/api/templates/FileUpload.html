@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File Upload via WebSocket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #fileInput {
+            margin: 10px 0;
+        }
+
+        #uploadBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #uploadBtn:hover {
+            background-color: #0056b3;
+        }
+
+        #progressContainer {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        #progressBar {
+            width: 100%;
+            height: 25px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #progressBarFill {
+            height: 100%;
+            width: 0;
+            background-color: #28a745;
+            text-align: center;
+            line-height: 25px;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        #progress {
+            margin-top: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload a Large File via WebSocket</h1>
+    <input type="file" id="fileInput">
+    <button id="uploadBtn">Upload</button>
+    <div id="progressContainer">
+        <div id="progressBar">
+            <div id="progressBarFill">0%</div>
+        </div>
+    </div>
+    <div id="progress"></div>
+
+    <script>
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInput = document.getElementById('fileInput');
+        const progressBarFill = document.getElementById('progressBarFill');
+        const progressText = document.getElementById('progress');
+        const chunkSize = 2 * 1024 * 1024; // 2 MB
+        let totalChunks = 0;
+
+        uploadBtn.onclick = () => {
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select a file first.');
+                return;
+            }
+
+            const ws = new WebSocket('ws://127.0.0.1:8000/ws/upload/');
+            
+            ws.onopen = () => {
+                console.log('WebSocket connection opened.');
+                startUpload(file, ws);
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data.type === 'chunk_received') {
+                    updateProgress(data.chunk_number);
+                } else if (data.type === 'upload_complete') {
+                    alert('File upload complete!');
+                    console.log('File uploaded to:', data.file_path);
+                }
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket connection closed.');
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket Error:', error);
+            };
+        };
+
+        async function startUpload(file, ws) {
+            totalChunks = Math.ceil(file.size / chunkSize);
+            ws.send(JSON.stringify({
+                'type': 'start_upload',
+                'file_name': file.name,
+                'total_chunks': totalChunks,
+            }));
+
+            for (let chunkNumber = 0; chunkNumber < totalChunks; chunkNumber++) {
+                const start = chunkNumber * chunkSize;
+                const end = Math.min(start + chunkSize, file.size);
+                const fileChunk = file.slice(start, end);
+
+                const buffer = await fileChunk.arrayBuffer();
+                ws.send(buffer);
+            }
+        }
+
+        function updateProgress(chunkNumber) {
+            const progressPercentage = ((chunkNumber + 1) / totalChunks) * 100;
+            progressBarFill.style.width = `${progressPercentage}%`;
+            progressBarFill.innerText = `${Math.round(progressPercentage)}%`;
+            progressText.innerText = `Uploading chunk ${chunkNumber + 1} of ${totalChunks}`;
+        }
+    </script>
+</body>
+</html>
