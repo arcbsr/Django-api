@@ -17,57 +17,75 @@
             background-color: #4CAF50;
             color: white;
             padding: 15px;
-            text-align: center;
-            font-size: 24px;
+            text-align: left;
+            font-size: 16px;
             font-weight: bold;
         }
         #chat-container {
             display: flex;
             flex-direction: column;
             flex: 1;
+            margin-bottom: 60px; /* Adds space for the fixed footer */
         }
         #chat-log {
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 15px;
             margin: 20px;
-            height: 70%;
+            flex: 1;
             overflow-y: auto;
             background-color: #ffffff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
         }
-
+    
         #chat-log p {
             margin: 5px 0;
             padding: 10px;
             border-radius: 8px;
-            max-width: 50%;  /* Limit the width of messages to half of the container */
-            display: inline-block;  /* Ensure messages don’t stretch across the full width */
+            max-width: 50%; /* Limit the width of messages to half of the container */
+            display: inline-block; /* Ensure messages don’t stretch across the full width */
             line-height: 1.4;
-            clear: both;  /* Ensure messages don't overlap */
+            clear: both; /* Ensure messages don't overlap */
         }
-
+    
         #chat-log .message-other {
             background-color: #e1f5fe;
             color: #0277bd;
-            align-self: flex-start;  /* Align to the left */
+            align-self: flex-start; /* Align to the left */
+            font-size: 14px;
         }
-
+    
         #chat-log .message-self {
             background-color: #dcedc8;
             color: #1b5e20;
             text-align: right;
-            align-self: flex-end;  /* Align to the right */
+            align-self: flex-end; /* Align to the right */
             margin-left: auto;
+            font-size: 14px;
         }
+    
+        #footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f5f5f5;
+            border-top: 1px solid #ddd;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
+    
         #chat-message-input {
             width: calc(100% - 110px);
             padding: 10px;
             border-radius: 4px;
             border: 1px solid #ddd;
+            margin-right: 10px;
+            margin-left: 10px;
         }
+    
         #chat-message-submit {
             padding: 10px 15px;
             border-radius: 4px;
@@ -75,28 +93,24 @@
             background-color: #4CAF50;
             color: white;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
+            margin-right: 15px;
         }
+    
         #chat-message-submit:hover {
             background-color: #45a049;
-        }
-        #footer {
-            padding: 10px;
-            background-color: #f5f5f5;
-            text-align: center;
-            border-top: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
-    <header>Welcom: {{ user }}</header>
+    <header>{{ user }}, Welcom to {{ room_name }}</header>
     <div id="chat-container">
         <div id="chat-log">
             {% for message in messages %}
                 {% if message.sender != user %}
                     <p class="message-other"><strong>{{ message.sender }}:</strong> {{ message.message }}</p>
                 {% else %}
-                    <p class="message-self"><strong>{{ message.sender }}:</strong> {{ message.message }}</p>
+                    <p class="message-self">{{ message.message }}</p>
                 {% endif %}
             {% endfor %}
         </div>

@@ -168,7 +168,7 @@ class DashboardView(View):
             user, auth_token = self.authenticate_token(token)
             if user:
                 try:
-                    get_room = Room.objects.get(room_name='fifa')
+                    get_room = Room.objects.get(room_name='test')
                 except Room.DoesNotExist:
                     return JsonResponse({"error": "Room not found"}, status=404)
 
@@ -184,7 +184,7 @@ class DashboardView(View):
                 context = {
                     "messages": get_messages,
                     "user": user.username,
-                    "room_name": 'fifa',
+                    "room_name": 'test',
                     "token": token,
                 }
                 return render(request, 'msg.html', context)

@@ -25,7 +25,7 @@ urlpatterns = [
 
     # View created
     
-    path('', CreateRoom, name='create-room'),
+    path('create/', CreateRoom, name='create-room'),
     # path('<str:room_name>/<str:username>/', views.MessageView, name='room'),
     
     path('<str:room_name>/<str:username>/', MessageView2, name='room'),
