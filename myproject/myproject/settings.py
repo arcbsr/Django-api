@@ -90,6 +90,7 @@ ASGI_APPLICATION = 'myproject.asgi.application'
 # uninstall channels and daphne
 # python -m pip install -U channels["daphne"]
 # python manage.py runserver 0.0.0.0:8000
+# 159.223.119.17
 CHANNEL_LAYERS = {
     "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
 }

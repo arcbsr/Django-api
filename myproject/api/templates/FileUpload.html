@@ -92,8 +92,9 @@
                 alert('Please select a file first.');
                 return;
             }
-
-            const ws = new WebSocket('ws://127.0.0.1:8000/ws/upload/');
+            const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+            const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/upload/`;
+            const ws = new WebSocket(wsEndpoint);
             
             ws.onopen = () => {
                 console.log('WebSocket connection opened.');
