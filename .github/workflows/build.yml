@@ -13,15 +13,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up SSH for DigitalOcean
-        with:
-          ssh-private-key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.DO_HOST }} >> ~/.ssh/known_hosts
 
       - name: Copy repository to the droplet
         run: |
           scp -r -o StrictHostKeyChecking=no ./* ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }}:/root/myapp
 
-      - name: Run Docker build on the droplet
+      - name: Build Docker image and deploy
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
             cd /root/myapp
