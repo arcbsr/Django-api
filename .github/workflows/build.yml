@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # Trigger this workflow when code is pushed to the main branch
+      - api_chatting  # Trigger this workflow when code is pushed to the main branch
 
 jobs:
   build-deploy:
