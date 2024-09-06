@@ -1,15 +1,6 @@
-version: '3.8'
+version: '3.9'
 
 services:
-  db:
-    image: postgres:13
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-      POSTGRES_DB: mydbb
-      POSTGRES_USER: bsrsoft
-      POSTGRES_PASSWORD: 2613
-
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -17,11 +8,17 @@ services:
       - .:/app
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-    environment:
-      DEBUG: 'True'
-      DATABASE_URL: postgres://myuser:mypassword@db:5432/mydatabase
+    # depends_on:
+    #   - db
 
-volumes:
-  postgres_data:
+#   db:
+#     image: postgres:13
+#     environment:
+#       POSTGRES_DB: django_db
+#       POSTGRES_USER: django_user
+#       POSTGRES_PASSWORD: password
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+
+# volumes:
+#   postgres_data:

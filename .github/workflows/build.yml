@@ -1,0 +1,33 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Trigger this workflow when code is pushed to the main branch
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH for DigitalOcean
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
+
+      - name: Copy repository to the droplet
+        run: |
+          scp -r -o StrictHostKeyChecking=no ./* ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }}:/root/myapp
+
+      - name: Run Docker build on the droplet
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
+            cd /root/myapp
+            docker build -t myapp:latest .
+            docker stop myapp || true
+            docker rm myapp || true
+            docker run -d -p 80:8000 --name myapp myapp:latest
+          EOF
