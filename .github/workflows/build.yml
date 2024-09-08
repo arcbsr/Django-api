@@ -22,35 +22,11 @@ jobs:
 
       - name: Copy repository to the droplet
         run: |
-          ssh -o StrictHostKeyChecking=no root@159.223.119.17 << 'EOF'
-            echo "Navigating to /path/to/Django-api"
-            cd /path/to/Django-api
-      
-            echo "Checking out the api_chatting branch"
-            git checkout api_chatting
-      
-            echo "Pulling the latest changes from the api_chatting branch"
-            git pull
-      
-            echo "Repository successfully updated on the droplet"
-          EOF
-      
-        
-      - name: Copy repository to the droplet
-        run: |
-          ssh -o StrictHostKeyChecking=no root@159.223.119.17 << 'EOF'
-            echo "Navigating to /root/Django-api"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
             cd /root/Django-api
-      
-            echo "Checking out the api_chatting branch"
             git checkout api_chatting
-      
-            echo "Pulling the latest changes from the api_chatting branch"
             git pull
-      
-            echo "Repository successfully updated on the droplet"
           EOF
-        
 
       - name: Build Docker image and deploy
         run: |
