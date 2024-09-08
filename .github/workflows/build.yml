@@ -22,10 +22,10 @@ jobs:
 
       - name: Copy repository to the droplet
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_USER }}@${{ secrets.DIGITALOCEAN_HOST }} << 'EOF'
-          cd /root/Django-api
+          ssh -o StrictHostKeyChecking=no user@hostname << 'EOF'
+          cd /path/to/Django-api
           git checkout api_chatting
-          git pull origin api_chatting
+          git pull
           EOF
 
       - name: Build Docker image and deploy
