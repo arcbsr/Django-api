@@ -20,13 +20,22 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.DO_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Copy repository to the droplet
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_USER }}@${{ secrets.DIGITALOCEAN_HOST }} << 'EOF'
-          cd /root/Django-api
-          git checkout api_chatting
-          git pull
-          EOF
+          - name: Copy repository to the droplet
+          run: |
+            ssh -o StrictHostKeyChecking=no root@159.223.119.17 << 'EOF'
+              echo "Navigating to /path/to/Django-api"
+              cd /root/Django-api
+        
+              echo "Checking out the api_chatting branch"
+              git checkout api_chatting
+        
+              echo "Pulling the latest changes from the api_chatting branch"
+              git pull
+        
+              echo "Repository successfully updated on the droplet"
+            EOF
+          shell: /usr/bin/bash -e {0}
+        
 
       - name: Build Docker image and deploy
         run: |
