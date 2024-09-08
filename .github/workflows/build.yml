@@ -1,40 +1,36 @@
-name: Deploy to Server
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main
+      - api_chatting  # Trigger this workflow when code is pushed to the main branch
 
 jobs:
-  deploy:
+  build-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Deploy to the droplet
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Set up SSH key
         run: |
-          # Create a temporary file for the SSH private key
-          echo "$SSH_PRIVATE_KEY" > private_key.pem
-          chmod 600 private_key.pem
-          
-          # Execute remote commands using SSH
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
-            echo "Navigating to /path/to/Django-api"
-            cd /path/to/Django-api
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.DO_HOST }} >> ~/.ssh/known_hosts
 
-            echo "Checking out the api_chatting branch"
-            git checkout api_chatting
-
-            echo "Pulling the latest changes from the api_chatting branch"
-            git pull
-
-            echo "Repository successfully updated on the droplet"
+      - name: Copy repository to the droplet
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DO_HOST }}@${{ secrets.DO_HOST }} << 'EOF'
           EOF
-          
-          # Clean up the temporary SSH private key file
-          rm private_key.pem
-        shell: /usr/bin/bash -e {0}
+
+      - name: Build Docker image and deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
+            cd /root/Django-api
+            docker build -t myapp:latest .
+            docker stop myapp || true
+            docker rm myapp || true
+            docker run -d -p 80:8000 --name myapp myapp:latest
+          EOF
