@@ -30,10 +30,22 @@ jobs:
 
       - name: Build Docker image and deploy
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
-            cd /root/Django-api
-            docker build -t myapp:latest .
-            docker stop myapp || true
-            docker rm myapp || true
-            docker run -d -p 80:8000 --name myapp myapp:latest
-          EOF
+        ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
+                echo "Changing directory to /root/Django-api"
+                cd /root/Django-api
+
+                echo "Building Docker image: myapp:latest"
+                docker build -t myapp:latest .
+
+                echo "Stopping the existing Docker container if it's running"
+                docker stop myapp || true
+
+                echo "Removing the Docker container if it exists"
+                docker rm myapp || true
+
+                echo "Running a new Docker container from the myapp:latest image"
+                docker run -d -p 80:8000 --name myapp myapp:latest
+
+                echo "Deployment completed successfully"
+        EOF
+
