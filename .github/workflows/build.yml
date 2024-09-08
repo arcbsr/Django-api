@@ -20,32 +20,28 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.DO_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Copy repository to the droplet
-        run: |
-          ssh -o StrictHostKeyChecking=no user@hostname << 'EOF'
-          cd /path/to/Django-api
-          git checkout api_chatting
-          git pull
-          EOF
+          - name: Copy repository to the droplet
+          run: |
+            ssh -o StrictHostKeyChecking=no user@hostname << 'EOF'
+              echo "Navigating to /path/to/Django-api"
+              cd /path/to/Django-api
+        
+              echo "Checking out the api_chatting branch"
+              git checkout api_chatting
+        
+              echo "Pulling the latest changes from the api_chatting branch"
+              git pull
+        
+              echo "Repository successfully updated on the droplet"
+            EOF
+        
 
       - name: Build Docker image and deploy
         run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
-                echo "Changing directory to /root/Django-api"
-                cd /root/Django-api
-
-                echo "Building Docker image: myapp:latest"
-                docker build -t myapp:latest .
-
-                echo "Stopping the existing Docker container if it's running"
-                docker stop myapp || true
-
-                echo "Removing the Docker container if it exists"
-                docker rm myapp || true
-
-                echo "Running a new Docker container from the myapp:latest image"
-                docker run -d -p 80:8000 --name myapp myapp:latest
-
-                echo "Deployment completed successfully"
-        EOF
-
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
+            cd /root/Django-api
+            docker build -t myapp:latest .
+            docker stop myapp || true
+            docker rm myapp || true
+            docker run -d -p 80:8000 --name myapp myapp:latest
+          EOF
