@@ -19,6 +19,9 @@ COPY requirements.txt /app/
 # Install the dependencies
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
+RUN pip uninstall -y channels
+RUN pip uninstall -y daphne
+RUN python -m pip install -U channels["daphne"]
 
 # Copy the current directory contents into the container at /app
 COPY . /app/
