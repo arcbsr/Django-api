@@ -30,7 +30,7 @@ jobs:
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<EOF
           cd ${{ secrets.WORK_DIR_ROOT }}
           source myprojectenv/bin/activate
-          cd Django-api/myproject
+          cd ${{ secrets.WORK_DIR_PROJECT }}
           pip install -r requirements.txt
         EOF
         
