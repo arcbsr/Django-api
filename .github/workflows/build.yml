@@ -26,6 +26,7 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: |
+          cd myproject
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
