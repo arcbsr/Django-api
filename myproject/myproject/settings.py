@@ -93,7 +93,7 @@ ASGI_APPLICATION = 'myproject.asgi.application'
 # 159.223.119.17
 # ps aux | grep runserver
 # kill -9 <pid>
-# docker-compose build , docker-compose up, docker-compose down
+# docker-compose build , docker-compose up, docker-compose down, docker ps, docker inspect <container_id_or_name>, docker logs <container_id_or_name>
 CHANNEL_LAYERS = {
     "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
 }
