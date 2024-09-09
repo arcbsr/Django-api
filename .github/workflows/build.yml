@@ -23,7 +23,7 @@ jobs:
     # Step 3: Deploy to DigitalOcean Droplet
     - name: Deploy to DigitalOcean
       run: |
-        ssh root@your_droplet_ip <<EOF
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<EOF
           cd ${{ secrets.WORK_DIR }}
           git pull origin ${{ secrets.MAIN_BRANCH }}
           python -m venv myprojectenv
