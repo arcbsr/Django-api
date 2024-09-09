@@ -25,14 +25,14 @@ jobs:
           cd ${{ secrets.WORK_DIR_ROOT }}
           source myprojectenv/bin/activate
         EOF
-    - name: actve env
+    - name: Deploy Project
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<EOF
           cd ${{ secrets.WORK_DIR_ROOT }}
           source myprojectenv/bin/activate
           cd ${{ secrets.WORK_DIR_PROJECT }}
           docker-compose build
-          docker-compose up
+          docker-compose up -d
           
         EOF
         
