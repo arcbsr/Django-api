@@ -19,10 +19,14 @@ jobs:
         ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
     - name: connect and pull
       run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && exit"
-    - name: create env
+    - name: actve env
+      run: |
+        cd ${{ secrets.WORK_DIR_ROOT }}
+        source myprojectenv/bin/activate
+    - name: actve env
       run: |
         cd ${{ secrets.WORK_DIR }}
-        python -m venv myprojectenv
+        pip install -r requirements.txt
 
     - name: cleanup
       run: rm -rf ~/.ssh
