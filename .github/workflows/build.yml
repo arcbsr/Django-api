@@ -23,7 +23,7 @@ jobs:
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<EOF
           cd ${{ secrets.WORK_DIR_PROD }}
-          source myprojectenv/bin/activate
+          python3 -m venv myprojectenv
         EOF
     - name: Deploy Project
       run: |
