@@ -32,8 +32,6 @@ jobs:
           source myprojectenv/bin/activate
           cd ${{ secrets.WORK_DIR_PROJECT }}
           pip install -r requirements.txt
-          pip uninstall channels
-          pip uninstall daphne
           python -m pip install -U channels["daphne"]
           python manage.py migrate
           python manage.py runserver 0.0.0.0:8000
