@@ -1,23 +1,30 @@
+name: Deploy Django Project to DigitalOcean
+
 on:
   push:
     branches:
-      - api_chatting
-  workflow_dispatch:
-  
+      - main  # Trigger deployment on push to the main branch
+
 jobs:
-  run_pull:
-    name: run pull
+  deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: install ssh keys
-      # check this thread to understand why its needed:
-      # https://stackoverflow.com/a/70447517
+    # Step 1: Checkout the latest version of the code from the GitHub repository
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    # Step 2: Set up SSH for deployment
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    # Step 3: Deploy to DigitalOcean Droplet
+    - name: Deploy to DigitalOcean
       run: |
-        install -m 600 -D /dev/null ~/.ssh/id_rsa
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
-    - name: connect and pull
-      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && exit"
-    - name: cleanup
-      run: rm -rf ~/.ssh
+        ssh root@your_droplet_ip <<EOF
+          cd ${{ secrets.WORK_DIR }}
+          git pull origin ${{ secrets.MAIN_BRANCH }}
+          python -m venv myprojectenv
+        EOF
