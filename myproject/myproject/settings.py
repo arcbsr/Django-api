@@ -91,6 +91,9 @@ ASGI_APPLICATION = 'myproject.asgi.application'
 # python -m pip install -U channels["daphne"]
 # python manage.py runserver 0.0.0.0:8000
 # 159.223.119.17
+# ps aux | grep runserver
+# kill -9 <pid>
+# docker-compose build , docker-compose up, docker-compose down
 CHANNEL_LAYERS = {
     "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
 }
