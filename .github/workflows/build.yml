@@ -21,7 +21,7 @@ jobs:
       run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && exit"
     - name: create env
       run: |
-        cd test
+        cd ${{ secrets.WORK_DIR }}
         python -m venv myprojectenv
 
     - name: cleanup
