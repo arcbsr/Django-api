@@ -96,6 +96,7 @@ ASGI_APPLICATION = 'myproject.asgi.application'
 # docker ps, docker inspect <container_id_or_name>, docker logs <container_id_or_name>,docker stop abc123, docker rm abc123
 # create sshke, cat /home/ubuntu/.ssh/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys
 # cat /home/ubuntu/.ssh/id_rsa, copy paste to github action...
+# git tag -a v1.0.0 -m "Release version 1.0.0", git push origin --tags
 CHANNEL_LAYERS = {
     "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
 }
