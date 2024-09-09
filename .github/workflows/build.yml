@@ -38,9 +38,9 @@ jobs:
           python3 -m venv myprojectenv
           source myprojectenv/bin/activate
           cd $PROJECT
-          pip uninstall -y channels
-          pip uninstall -y daphne
-          python -m pip install -U channels["daphne"]
+          # pip uninstall -y channels
+          # pip uninstall -y daphne
+          # python -m pip install -U channels["daphne"]
           cd myproject
           docker-compose build
           docker-compose up -d
