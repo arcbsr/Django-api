@@ -1,8 +1,14 @@
 on:
   push:
-    branches:
-      - api_chatting
+    tags:
+      - 'v*'  # Matches any tag that starts with 'v'
+    # branches:
+    #   - api_chatting
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to deploy'
+        required: true
   
 jobs:
   run_pull:

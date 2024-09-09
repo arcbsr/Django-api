@@ -94,6 +94,8 @@ ASGI_APPLICATION = 'myproject.asgi.application'
 # ps aux | grep runserver, kill -9 <pid>
 # docker-compose build , docker-compose up (-d for detach mode), docker-compose down, 
 # docker ps, docker inspect <container_id_or_name>, docker logs <container_id_or_name>,docker stop abc123, docker rm abc123
+# create sshke, cat /home/ubuntu/.ssh/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys
+# cat /home/ubuntu/.ssh/id_rsa, copy paste to github action...
 CHANNEL_LAYERS = {
     "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
 }
