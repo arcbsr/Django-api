@@ -48,6 +48,7 @@ jobs:
       # Run tests
       - name: Run server
         run: |
+          cd myproject
           python manage.py runserver 0.0.0.0:8000
 
       # (Optional) Run the Django development server for demo
