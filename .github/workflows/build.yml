@@ -1,39 +1,54 @@
-name: CI/CD Pipeline
+name: Django CI Pipeline
 
 on:
   push:
     branches:
-      - api_chatting  # Trigger this workflow when code is pushed to the main branch
+      - main  # Runs the pipeline when changes are pushed to the `main` branch
+  pull_request:
+    branches:
+      - main  # Runs on pull requests to the `main` branch
 
 jobs:
-  build-deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the code from your GitHub repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.DO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.DO_HOST }} >> ~/.ssh/known_hosts
+      # Set up Python environment
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # Use the Python version that suits your project
 
-      - name: Copy repository to the droplet
+      # Install dependencies
+      - name: Install dependencies
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
-            cd /root/Django-api
-            git checkout api_chatting
-            git pull
-          EOF
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Build Docker image and deploy
+      # Set up the Django environment variables
+      - name: Set up environment
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
-            cd /root/Django-api
-            docker build -t myapp:latest .
-            docker stop myapp || true
-            docker rm myapp || true
-            docker run -d -p 80:8000 --name myapp myapp:latest
-          EOF
+          echo "SECRET_KEY=mysecretkey" >> .env
+          echo "DEBUG=True" >> .env
+          echo "DATABASE_URL=sqlite:///db.sqlite3" >> .env
+        env:
+          DJANGO_SETTINGS_MODULE: myproject.settings  # Replace 'myproject' with your project name
+
+      # Run Django migrations (optional)
+      - name: Run migrations
+        run: |
+          python manage.py migrate
+
+      # Run tests
+      - name: Run server
+        run: |
+          python manage.py runserver 0.0.0.0:8000
+
+      # (Optional) Run the Django development server for demo
+      # Uncomment below if you want to check if the server starts
+      # - name: Run Django server
+      #   run: python manage.py runserver 0.0.0.0:8000
