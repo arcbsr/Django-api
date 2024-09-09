@@ -1,38 +1,23 @@
-name: Deploy Django Project to DigitalOcean
-
 on:
   push:
     branches:
-      - api_chatting  # Trigger deployment on push to the main branch
-
+      - api_chatting
+  workflow_dispatch:
+  
 jobs:
-  deploy:
+  run_pull:
+    name: run pull
     runs-on: ubuntu-latest
-
+    
     steps:
-    # Step 1: Checkout the latest version of the code from the GitHub repository
-    - name: Checkout Code
-      uses: actions/checkout@v2
-
-    # Step 2: Set up SSH for deployment
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
-
-    # Step 3: Deploy to DigitalOcean Droplet
-    - name: Deploy to DigitalOcean
+    - name: install ssh keys
+      # check this thread to understand why its needed:
+      # https://stackoverflow.com/a/70447517
       run: |
-        ssh root@159.223.119.17 <<EOF
-          mkdir myproject
-          cd myproject
-          git clone https://github.com/arcbsr/Django-api.git
-          cd /Django-api/myproject
-          git pull origin main
-          source /path/to/your/venv/bin/activate
-          pip install -r requirements.txt
-          python manage.py migrate
-          python manage.py collectstatic --noinput
-          sudo systemctl restart gunicorn
-          sudo systemctl restart nginx
-        EOF
+        install -m 600 -D /dev/null ~/.ssh/id_rsa
+        echo "${{ secrets.DO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+    - name: connect and pull
+      run: ssh ${{ secrets.DO_SSH_USER }}@${{ secrets.DO_SSH_HOST }} "cd test && git checkout api_chatting && git pull && exit"
+    - name: cleanup
+      run: rm -rf ~/.ssh
