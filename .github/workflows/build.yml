@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main
+      - api_chatting
   workflow_dispatch:
   
 jobs:
