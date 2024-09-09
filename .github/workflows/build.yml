@@ -27,8 +27,11 @@ jobs:
         EOF
     - name: actve env
       run: |
-        cd ${{ secrets.WORK_DIR }}
-        pip install -r requirements.txt
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<EOF
+          cd ${{ secrets.WORK_DIR_POJECT }}
+          pip install -r requirements.txt
+        EOF
+        
 
     - name: cleanup
       run: rm -rf ~/.ssh
