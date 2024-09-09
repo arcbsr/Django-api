@@ -10,29 +10,34 @@ jobs:
     runs-on: ubuntu-latest
     env:
       WORK_DIR: ${{ secrets.WORK_DIR_DEV }}
+      HOST: ${{ secrets.SSH_HOST }}
+      USER: ${{ secrets.SSH_USER }}
+      PROJECT: ${{ secrets.WORK_PROJECT }}
+      PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      BRANCH: "api_chatting"
     steps:
     - name: install ssh keys
       # check this thread to understand why its needed:
       # https://stackoverflow.com/a/70447517
       run: |
         install -m 600 -D /dev/null ~/.ssh/id_rsa
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+        echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
+        ssh-keyscan -H $HOST > ~/.ssh/known_hosts
     - name: connect and pull
-      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd $WORK_DIR/${{ secrets.WORK_PROJECT }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && exit"
+      run: ssh $USER@$HOST "cd $WORK_DIR/$PROJECT && git checkout $BRANCH && git pull && exit"
     - name: active env
       run: |
-        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<EOF
+        ssh $USER@$HOST <<EOF
           cd $WORK_DIR
           python3 -m venv myprojectenv
         EOF
     - name: Deploy Project
       run: |
-        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<EOF
+        ssh $USER@$HOST <<EOF
           cd $WORK_DIR
           python3 -m venv myprojectenv
           source myprojectenv/bin/activate
-          cd ${{ secrets.WORK_PROJECT }}
+          cd $PROJECT
           pip uninstall -y channels
           pip uninstall -y daphne
           python -m pip install -U channels["daphne"]
