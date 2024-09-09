@@ -9,7 +9,7 @@ jobs:
     name: run pull
     runs-on: ubuntu-latest
     env:
-      WORK_DIR: ${{ secrets.WORK_DIR_DEV }}
+      WORK_DIR: ${{ secrets.WORK_DIR_PROD }}
       HOST: ${{ secrets.SSH_HOST }}
       USER: ${{ secrets.SSH_USER }}
       PROJECT: ${{ secrets.WORK_PROJECT }}

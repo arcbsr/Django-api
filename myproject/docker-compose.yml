@@ -1,13 +1,13 @@
 version: '3.9'
 
 services:
-  apiv1:
+  apiv2:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
     ports:
-      - "5000:8000"
+      - "8000:8000"
 
   # web2:
   #   build: .
