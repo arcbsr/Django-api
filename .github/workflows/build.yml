@@ -25,7 +25,7 @@ jobs:
         ssh-keyscan -H $HOST > ~/.ssh/known_hosts
     - name: connect and pull
       run: ssh $USER@$HOST "cd $WORK_DIR/$PROJECT && git checkout $BRANCH && git pull && exit"
-    - name: active env
+    - name: Create ENV
       run: |
         ssh $USER@$HOST <<EOF
           cd $WORK_DIR

@@ -6,12 +6,16 @@ from channels.exceptions import DenyConnection
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        self.room_name_chnl = f"room_{self.scope['url_route']['kwargs']['room_name']}"
         if self.scope['user'].is_anonymous:
             await self.close()
             raise DenyConnection("User is not authenticated")
-
+        
+        # if self.scope['user'].role == 'user':
+        #     await self.close()
+        #     raise DenyConnection("You are not admin")
+        
         print(self.scope['user'])
-        self.room_name_chnl = f"room_{self.scope['url_route']['kwargs']['room_name']}"
         self.room_name = f"{self.scope['url_route']['kwargs']['room_name']}"
         self.user_name = self.scope['user'].username
         # f"{self.scope['url_route']['kwargs']['user_name']}"
@@ -43,7 +47,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # await self.create_message(data=data)
         response_data = {
             'sender': data['sender'],
-            'message': data['message']
+            'message': data['message'],
             
         }
 
