@@ -15,8 +15,6 @@ jobs:
       # https://stackoverflow.com/a/70447517
       run: |
         ls
-        echo "${{ secrets.DO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
     - name: connect and pull
       run: ssh ${{ secrets.DO_SSH_USER }}@${{ secrets.DO_SSH_HOST }} "cd test && git checkout api_chatting && git pull && exit"
     - name: cleanup
