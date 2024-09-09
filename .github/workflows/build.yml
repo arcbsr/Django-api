@@ -3,10 +3,10 @@ name: Django CI Pipeline
 on:
   push:
     branches:
-      - main  # Runs the pipeline when changes are pushed to the `main` branch
+      - api_chatting  # Runs the pipeline when changes are pushed to the `main` branch
   pull_request:
     branches:
-      - main  # Runs on pull requests to the `main` branch
+      - api_chatting  # Runs on pull requests to the `main` branch
 
 jobs:
   test:
