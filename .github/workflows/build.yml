@@ -18,19 +18,23 @@ jobs:
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
     - name: connect and pull
-      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && exit"
+      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR_PROD }}/${{ secrets.WORK_PROJECT }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && exit"
     - name: active env
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<EOF
-          cd ${{ secrets.WORK_DIR_ROOT }}
+          cd ${{ secrets.WORK_DIR_PROD }}
           source myprojectenv/bin/activate
         EOF
     - name: Deploy Project
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<EOF
-          cd ${{ secrets.WORK_DIR_ROOT }}
+          cd ${{ secrets.WORK_DIR_PROD }}
+          python3 -m venv myprojectenv
           source myprojectenv/bin/activate
-          cd ${{ secrets.WORK_DIR_PROJECT }}
+          cd ${{ secrets.WORK_PROJECT }}
+          pip uninstall -y channels
+          pip uninstall -y daphne
+          python -m pip install -U channels["daphne"]
           docker-compose build
           docker-compose up -d
           
