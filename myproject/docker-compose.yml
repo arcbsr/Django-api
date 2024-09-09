@@ -1,32 +1,25 @@
 version: '3.9'
 
 services:
-  apiv2:
+  apiv7:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:5000
     volumes:
       - .:/app
     ports:
-      - "8000:8000"
+      - "5000:8000"
 
-  # web2:
-  #   build: .
-  #   command: python manage.py runserver 0.0.0.0:8000
-  #   volumes:
-  #     - .:/app
-  #   ports:
-  #     - "8001:8000"
-    # depends_on:
-    #   - db
+# version: '3'
 
-#   db:
-#     image: postgres:13
-#     environment:
-#       POSTGRES_DB: django_db
-#       POSTGRES_USER: django_user
-#       POSTGRES_PASSWORD: password
-#     volumes:
-#       - postgres_data:/var/lib/postgresql/data
+# services:
+#   django_dev:
+#     build: .
+#     command: python manage.py runserver 0.0.0.0:8001
+#     ports:
+#       - "8001:8001"
 
-# volumes:
-#   postgres_data:
+#   django_prod:
+#     build: .
+#     command: python manage.py runserver 0.0.0.0:8002
+#     ports:
+#       - "8002:8002"
