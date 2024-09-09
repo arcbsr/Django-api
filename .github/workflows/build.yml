@@ -20,6 +20,6 @@ jobs:
     - name: connect and pull
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 
-        "cd ${{ secrets.WORK_DIR }} && cd Django-api && git checkout ${{ secrets.MAIN_BRANCH }} && exit"
+        "cd ${{ secrets.WORK_DIR }}/Django-api && git checkout ${{ secrets.MAIN_BRANCH }} && exit"
     - name: cleanup
       run: rm -rf ~/.ssh
