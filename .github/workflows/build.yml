@@ -3,7 +3,7 @@ name: Deploy Django Project to DigitalOcean
 on:
   push:
     branches:
-      - main  # Trigger deployment on push to the main branch
+      - api_chatting  # Trigger deployment on push to the main branch
 
 jobs:
   deploy:
