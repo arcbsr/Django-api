@@ -28,6 +28,8 @@ jobs:
     - name: actve env
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<EOF
+          cd ${{ secrets.WORK_DIR_ROOT }}
+          source myprojectenv/bin/activate
           cd ${{ secrets.WORK_DIR_POJECT }}
           pip install -r requirements.txt
         EOF
