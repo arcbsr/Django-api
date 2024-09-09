@@ -21,9 +21,10 @@ jobs:
       run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && exit"
     - name: actve env
       run: |
-        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
-        cd ${{ secrets.WORK_DIR_ROOT }}
-        source myprojectenv/bin/activate
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<EOF
+          cd ${{ secrets.WORK_DIR_ROOT }}
+          source myprojectenv/bin/activate
+        EOF
     - name: actve env
       run: |
         cd ${{ secrets.WORK_DIR }}
