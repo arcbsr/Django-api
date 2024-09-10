@@ -12,6 +12,7 @@ class CustomUser(AbstractUser):
         ('admin', 'Admin'),
         ('staff', 'Staff'),
         ('user', 'User'),
+        ('guest', 'Guest'),
     )
     ACTIVE_CHOICES = (
         ('active', 'Active'),

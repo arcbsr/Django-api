@@ -3,7 +3,6 @@ from django.db import models
 
 class Room(models.Model):
     room_name = models.CharField(max_length=255)
-
     def __str(self):
         return self.room_name
 
