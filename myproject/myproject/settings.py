@@ -99,6 +99,7 @@ ASGI_APPLICATION = 'myproject.asgi.application'
 # cat /home/ubuntu/.ssh/id_rsa, copy paste to github action...
 # git tag -a v1.0.0 -m "Release version 1.0.0", git push origin --tags
 # docker-compose ps , docker-compose exec <SERVICE> python manage.py migrate, docker-compose exec apiv3 python manage.py createsuperuser
+# docker rmi -f $(docker images -q -a), docker images -a, docker image prune -a
 CHANNEL_LAYERS = {
     "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
 }

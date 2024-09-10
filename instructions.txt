@@ -1,0 +1,31 @@
+important in serer side
+## some libs are not installed in docker container properly, need to force install in docker...
+uninstall channels and daphne
+python -m pip install -U channels["daphne"]
+
+## run server commands
+python manage.py runserver 0.0.0.0:8000
+
+## check all ports are open and working
+ps aux | grep runserver, kill -9 <pid>
+
+## docker commands
+docker-compose build , docker-compose up (-d for detach mode), docker-compose down, 
+docker ps, docker inspect <container_id_or_name>, docker logs <container_id_or_name>,docker stop abc123, docker rm abc123
+
+## create ssh key and interae with github action
+create ssh-key,
+cat /home/ubuntu/.ssh/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys
+cat /home/ubuntu/.ssh/id_rsa, copy paste to github action...
+
+## git commands for tags and releases
+git tag -a v1.0.0 -m "Release version 1.0.0", 
+git push origin --tags
+
+## docker commands for django and postgres
+docker-compose ps , 
+docker-compose exec <SERVICE> python manage.py migrate, if needed
+docker-compose exec apiv3 python manage.py createsuperuser - if needed
+
+## docker commands container and images or remove all images
+docker rmi -f $(docker images -q -a), docker images -a, docker image prune -a
