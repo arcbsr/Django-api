@@ -12,7 +12,7 @@ on:
   
 jobs:
   run_pull:
-    name: run pull
+    name: Project Setup
     runs-on: ubuntu-latest
     env:
       WORK_DIR: ${{ secrets.WORK_DIR_DEV }}
@@ -22,14 +22,14 @@ jobs:
       PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       BRANCH: "api_chatting"
     steps:
-    - name: install ssh keys
+    - name: Install Ssh Keys
       # check this thread to understand why its needed:
       # https://stackoverflow.com/a/70447517
       run: |
         install -m 600 -D /dev/null ~/.ssh/id_rsa
         echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
         ssh-keyscan -H $HOST > ~/.ssh/known_hosts
-    - name: connect and pull
+    - name: Update Project
       run: ssh $USER@$HOST "cd $WORK_DIR/$PROJECT && git checkout $BRANCH && git pull && exit"
     - name: Create ENV
       run: |
@@ -44,12 +44,8 @@ jobs:
           python3 -m venv myprojectenv
           source myprojectenv/bin/activate
           cd $PROJECT
-          # pip uninstall -y channels
-          # pip uninstall -y daphne
-          # python -m pip install -U channels["daphne"]
           cd myproject
-          docker-compose build
-          docker-compose up -d
+          docker-compose up --build -d
           
         EOF
         
