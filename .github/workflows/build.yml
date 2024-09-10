@@ -1,9 +1,13 @@
+name: Deploy on Release
 on:
-  push:
-    tags:
-      - 'v*'  # Matches any tag that starts with 'v'
-    # branches:
-    #   - api_chatting
+  release:
+    types:
+      - published  # Triggers the workflow when a release is published
+  # push:
+  #   tags:
+  #     - 'v*'  # Matches any tag that starts with 'v'
+  #   # branches:
+  #   #   - api_chatting
   workflow_dispatch:
     inputs:
       tag:
